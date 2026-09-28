@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Position Picker</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#f2ecdd;
+    --surface:#fffdf7;
+    --surface-2:#ebe3cf;
+    --ink:#1c2723;
+    --muted:#5d6b62;
+    --line:#d8cdb0;
+    --court:#0f6b63;
+    --court-dark:#0b544e;
+    --court-line:#f3c959;
+    --accent:#df5a34;
+    --accent-ink:#fff8ef;
+    --good:#2f8f57;
+    --chip-s:#f3c959;
+    --chip-opp:#df5a34;
+    --chip-oh:#2f6fa3;
+    --chip-mb:#3c7a58;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#111815; --surface:#1a2420; --surface-2:#20302a; --ink:#eee8d9;
+      --muted:#a3b3a9; --line:#2c3b34; --court:#0d5951; --court-dark:#093f3a;
+      --accent:#ed7350; --accent-ink:#1b120c; --good:#4bb579;
+    }
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', system-ui, sans-serif;
+    padding:24px 16px 60px;
+  }
+  h1,.display{ font-family:'Oswald','Inter',sans-serif; text-transform:uppercase; letter-spacing:0.03em; }
+  .wrap{ max-width:520px; margin:0 auto; }
+  h1{ font-size:28px; font-weight:700; margin:0 0 4px; }
+  .subtitle{ color:var(--muted); font-size:14px; margin:0 0 20px; line-height:1.5; }
+
+  .panel{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:16px; }
+
+  .progress{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+  .dot{
+    width:26px; height:26px; border-radius:6px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Oswald',sans-serif; font-size:10px; font-weight:700;
+    background:var(--surface-2); color:var(--muted); border:1px solid var(--line);
+    cursor:pointer;
+  }
+  .dot.done{ background:var(--good); color:#fff; border-color:transparent; }
+  .dot.current{ outline:2px solid var(--accent); outline-offset:1px; }
+
+  .formation-head{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:4px; flex-wrap:wrap; gap:8px;
+  }
+  .formation-label{ font-family:'Oswald',sans-serif; font-weight:700; font-size:16px; letter-spacing:0.02em; }
+  .formation-count{ font-size:12px; color:var(--muted); font-family:'Oswald',sans-serif; letter-spacing:0.04em; text-transform:uppercase; }
+  .formation-note{ font-size:12.5px; color:var(--muted); margin:0 0 14px; line-height:1.45; }
+
+  .net-row{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .net-row .net-label{ font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:0.12em; color:var(--muted); }
+  .net-bar{
+    flex:1; height:9px; border-radius:3px;
+    background: repeating-linear-gradient(135deg, rgba(0,0,0,0.18) 0 2px, transparent 2px 8px), var(--court-line);
+  }
+
+  .court-frame{
+    position:relative; width:100%; aspect-ratio:1/1;
+    background:var(--court); border:3px solid var(--court-line); border-radius:4px;
+    overflow:hidden; touch-action:none;
+  }
+  .attack-line{ position:absolute; left:0; right:0; top:33.333%; border-top:2px dashed rgba(255,255,255,0.5); }
+  .zone-grid{ position:absolute; inset:0; pointer-events:none; }
+  .zone-grid .vline{ position:absolute; top:0; bottom:0; border-left:1.5px dashed rgba(255,255,255,0.25); }
+  .zone-grid .label{ position:absolute; font-family:'Oswald',sans-serif; font-size:12px; color:rgba(255,255,255,0.3); font-weight:600; }
+
+  .service-strip{
+    margin-top:8px; min-height:56px; border:2px dashed var(--court-line); border-radius:8px;
+    background:var(--surface-2); display:flex; align-items:center; justify-content:center;
+    font-family:'Oswald',sans-serif; font-size:10.5px; letter-spacing:0.04em; text-transform:uppercase;
+    color:var(--muted); text-align:center; padding:8px;
+  }
+  .service-strip[hidden]{ display:none; }
+
+  .icon{
+    position:absolute; width:16%; aspect-ratio:1/1; transform:translate(-50%,-50%);
+    border-radius:50%; background:var(--surface); border:3px solid var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    cursor:grab; user-select:none; -webkit-user-select:none; touch-action:none;
+    box-shadow:0 3px 8px rgba(0,0,0,0.28); z-index:2;
+  }
+  .icon:active{ cursor:grabbing; }
+  .icon .role{ font-family:'Oswald',sans-serif; font-weight:700; font-size:clamp(9px,2.4vw,13px); color:var(--ink); }
+  .icon .stripe{
+    position:absolute; top:-3px; left:-3px; right:-3px; height:34%;
+    border-radius:50% 50% 0 0 / 100% 100% 0 0; opacity:0.9; z-index:-1;
+  }
+  .icon[data-group="S"]   .stripe{ background:var(--chip-s); }
+  .icon[data-group="OPP"] .stripe{ background:var(--chip-opp); }
+  .icon[data-group="OH"]  .stripe{ background:var(--chip-oh); }
+  .icon[data-group="MB"]  .stripe{ background:var(--chip-mb); }
+
+  .legend{ display:flex; flex-wrap:wrap; gap:10px 16px; margin-top:10px; }
+  .legend .item{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink); }
+  .legend .dot2{ width:10px; height:10px; border-radius:50%; }
+  .legend .dot2.s{ background:var(--chip-s); }
+  .legend .dot2.opp{ background:var(--chip-opp); }
+  .legend .dot2.oh{ background:var(--chip-oh); }
+  .legend .dot2.mb{ background:var(--chip-mb); }
+
+  .btn-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  .btn{
+    font-family:'Oswald',sans-serif; font-size:13px; font-weight:600; letter-spacing:0.03em;
+    text-transform:uppercase; border-radius:9px; border:1px solid var(--line);
+    background:var(--surface-2); color:var(--ink); padding:9px 14px; cursor:pointer;
+  }
+  .btn:hover{ filter:brightness(0.97); }
+  .btn.primary{ background:var(--accent); color:var(--accent-ink); border-color:transparent; }
+  .btn:disabled{ opacity:0.4; cursor:default; }
+
+  .status{ font-size:12px; color:var(--muted); margin:10px 0 0; min-height:16px; }
+  .status.saved{ color:var(--good); }
+
+  textarea.code-out{
+    width:100%; margin-top:10px; font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+    font-size:11px; line-height:1.5; color:var(--ink); background:var(--surface-2);
+    border:1px solid var(--line); border-radius:8px; padding:10px; resize:vertical;
+  }
+  footer{ text-align:center; font-size:12px; color:var(--muted); margin-top:18px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1>Position Picker</h1>
+  <p class="subtitle">Drag each player to match your reference for every one of the 12 formations (6 Serving + 6 Serve Receive), saving as you go. When you're done, generate the code and paste it into <code>rotation-ref.html</code>'s <code>MANUAL_POSITIONS</code> table.</p>
+
+  <div class="panel">
+    <div class="progress" id="progress"></div>
+
+    <div class="formation-head">
+      <span class="formation-label" id="formationLabel">Serving — Rotation 1</span>
+      <span class="formation-count" id="formationCount">1 of 12</span>
+    </div>
+    <p class="formation-note" id="formationNote"></p>
+
+    <div class="net-row"><span class="net-label">NET</span><div class="net-bar"></div></div>
+
+    <div class="court-frame" id="court">
+      <div class="zone-grid">
+        <div class="vline" style="left:33.333%"></div>
+        <div class="vline" style="left:66.666%"></div>
+        <div class="label" style="left:11%; top:5%;">4</div>
+        <div class="label" style="left:46%; top:5%;">3</div>
+        <div class="label" style="left:81%; top:5%;">2</div>
+        <div class="label" style="left:11%; top:69%;">5</div>
+        <div class="label" style="left:46%; top:69%;">6</div>
+        <div class="label" style="left:81%; top:69%;">1</div>
+      </div>
+      <div class="attack-line"></div>
+      <!-- icons injected by JS -->
+    </div>
+
+    <div class="service-strip" id="serviceStrip" hidden>Server (Zone 1) doesn't need a position — drawn off-court automatically</div>
+
+    <div class="legend">
+      <span class="item"><span class="dot2 s"></span>Setter</span>
+      <span class="item"><span class="dot2 opp"></span>Opposite</span>
+      <span class="item"><span class="dot2 oh"></span>Outside</span>
+      <span class="item"><span class="dot2 mb"></span>Middle</span>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" id="btnPrev">‹ Previous</button>
+      <button class="btn" id="btnResetFormation">Reset this one</button>
+      <button class="btn primary" id="btnSaveNext">Save &amp; next ›</button>
+    </div>
+    <p class="status" id="status"></p>
+  </div>
+
+  <div class="panel">
+    <div class="btn-row" style="margin-top:0;">
+      <button class="btn primary" id="btnGenerate">Generate code</button>
+      <button class="btn" id="btnCopy" hidden>Copy</button>
+    </div>
+    <p class="status" id="generateStatus"></p>
+    <textarea class="code-out" id="codeOut" rows="4" readonly hidden></textarea>
+  </div>
+
+  <footer>Progress is saved in this browser only (localStorage) until you paste the generated code into the file.</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var ROLES = [
+    {id:"S",   name:"Setter",    group:"S"},
+    {id:"OPP", name:"Opposite",  group:"OPP"},
+    {id:"OH1", name:"Outside 1", group:"OH"},
+    {id:"OH2", name:"Outside 2", group:"OH"},
+    {id:"M1",  name:"Middle 1",  group:"MB"},
+    {id:"M2",  name:"Middle 2",  group:"MB"}
+  ];
+  // Same corrected mapping as rotation-ref.html.
+  var BASE_SLOT = { S:1, OH1:2, M2:3, OPP:4, OH2:5, M1:6 };
+  var PAD = 0.09;
+
+  // Neutral, non-overlapping starting layout — deliberately not a guess at
+  // the real answer, just spread out so nothing stacks before you drag.
+  var NEUTRAL_GRID = [
+    {x:0.2,y:0.25},{x:0.5,y:0.25},{x:0.8,y:0.25},
+    {x:0.2,y:0.75},{x:0.5,y:0.75},{x:0.8,y:0.75}
+  ];
+
+  // 12 formations: Serving 1-6, then Serve Receive 1-6.
+  var FORMATIONS = [];
+  for(var r=1;r<=6;r++) FORMATIONS.push({mode:"serve", rotation:r});
+  for(var r2=1;r2<=6;r2++) FORMATIONS.push({mode:"receive", rotation:r2});
+
+  function currentSlot(roleId, rotation){
+    var i = BASE_SLOT[roleId] - 1;
+    return ((i - (rotation - 1) + 6) % 6) + 1;
+  }
+  function roleAtSlot(slot, rotation){
+    for(var i=0;i<ROLES.length;i++){
+      if(currentSlot(ROLES[i].id, rotation) === slot) return ROLES[i];
+    }
+    return null;
+  }
+  function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+  function fmtNum(n){ return Math.round(n*1000)/1000; }
+
+  var SAVED = { serve:{}, receive:{} };
+  function loadSaved(){
+    try{
+      var raw = localStorage.getItem("positionPicker.saved");
+      if(raw){
+        var parsed = JSON.parse(raw);
+        if(parsed && parsed.serve && parsed.receive) SAVED = parsed;
+      }
+    }catch(e){}
+  }
+  function persistSaved(){
+    try{ localStorage.setItem("positionPicker.saved", JSON.stringify(SAVED)); }catch(e){}
+  }
+
+  var current = 0; // index into FORMATIONS
+  try{
+    var savedIndex = localStorage.getItem("positionPicker.currentIndex");
+    if(savedIndex !== null) current = clamp(parseInt(savedIndex,10) || 0, 0, 11);
+  }catch(e){}
+
+  var positions = {}; // live drag state for the formation on screen
+
+  var court = document.getElementById("court");
+  var serviceStrip = document.getElementById("serviceStrip");
+  var progressEl = document.getElementById("progress");
+  var formationLabel = document.getElementById("formationLabel");
+  var formationCount = document.getElementById("formationCount");
+  var formationNote = document.getElementById("formationNote");
+  var statusEl = document.getElementById("status");
+  var btnPrev = document.getElementById("btnPrev");
+  var btnSaveNext = document.getElementById("btnSaveNext");
+  var btnResetFormation = document.getElementById("btnResetFormation");
+  var btnGenerate = document.getElementById("btnGenerate");
+  var btnCopy = document.getElementById("btnCopy");
+  var codeOut = document.getElementById("codeOut");
+  var generateStatus = document.getElementById("generateStatus");
+
+  // ---- build icon DOM once; repositioned per formation ----
+  var iconEls = {};
+  ROLES.forEach(function(role){
+    var el = document.createElement("div");
+    el.className = "icon";
+    el.dataset.group = role.group;
+    el.innerHTML = '<div class="stripe"></div><div class="role">' + role.id + '</div>';
+    court.appendChild(el);
+    iconEls[role.id] = el;
+    makeDraggable(el, role.id);
+  });
+
+  function makeDraggable(el, roleId){
+    var dragging = false;
+    el.addEventListener("pointerdown", function(e){
+      if(el.dataset.locked === "true") return;
+      dragging = true;
+      el.setPointerCapture(e.pointerId);
+      el.style.zIndex = 5;
+    });
+    el.addEventListener("pointermove", function(e){
+      if(!dragging) return;
+      var rect = court.getBoundingClientRect();
+      var x = clamp((e.clientX - rect.left) / rect.width, PAD*0.4, 1 - PAD*0.4);
+      var y = clamp((e.clientY - rect.top) / rect.height, PAD*0.4, 1 - PAD*0.4);
+      positions[roleId] = {x:x, y:y};
+      render();
+      markUnsaved();
+    });
+    function end(e){
+      if(!dragging) return;
+      dragging = false;
+      el.style.zIndex = "";
+      try{ el.releasePointerCapture(e.pointerId); }catch(err){}
+    }
+    el.addEventListener("pointerup", end);
+    el.addEventListener("pointercancel", end);
+  }
+
+  function formationKey(f){ return f.mode + ":" + f.rotation; }
+
+  function isSaved(f){
+    return !!(SAVED[f.mode] && SAVED[f.mode][f.rotation]);
+  }
+
+  function loadFormation(index){
+    current = index;
+    try{ localStorage.setItem("positionPicker.currentIndex", String(current)); }catch(e){}
+    var f = FORMATIONS[current];
+    var serverRole = roleAtSlot(1, f.rotation);
+    var saved = SAVED[f.mode][f.rotation];
+
+    positions = {};
+    ROLES.forEach(function(role, i){
+      if(saved && saved[role.id]) positions[role.id] = { x: saved[role.id].x, y: saved[role.id].y };
+      else positions[role.id] = { x: NEUTRAL_GRID[i].x, y: NEUTRAL_GRID[i].y };
+    });
+
+    formationLabel.textContent = (f.mode === "serve" ? "Serving" : "Serve Receive") + " — Rotation " + f.rotation;
+    formationCount.textContent = (current+1) + " of " + FORMATIONS.length;
+    formationNote.textContent = f.mode === "serve"
+      ? "Your team is serving. Drag the 5 players on court; the server is parked below automatically."
+      : "The opponent is serving — all 6 of your players are on court and need a position.";
+    serviceStrip.hidden = f.mode !== "serve";
+
+    ROLES.forEach(function(role){
+      var isServer = f.mode === "serve" && serverRole && role.id === serverRole.id;
+      iconEls[role.id].dataset.locked = isServer ? "true" : "false";
+      iconEls[role.id].style.display = isServer ? "none" : "flex";
+    });
+
+    render();
+    renderProgress();
+    updateStatus();
+  }
+
+  function render(){
+    ROLES.forEach(function(role){
+      var el = iconEls[role.id];
+      if(el.style.display === "none") return;
+      var p = positions[role.id];
+      el.style.left = (p.x*100) + "%";
+      el.style.top = (p.y*100) + "%";
+    });
+  }
+
+  function renderProgress(){
+    progressEl.innerHTML = "";
+    FORMATIONS.forEach(function(f, i){
+      var d = document.createElement("div");
+      d.className = "dot" + (isSaved(f) ? " done" : "") + (i === current ? " current" : "");
+      d.textContent = (f.mode === "serve" ? "S" : "R") + f.rotation;
+      d.title = (f.mode === "serve" ? "Serving" : "Serve Receive") + " Rotation " + f.rotation;
+      d.addEventListener("click", function(){ loadFormation(i); });
+      progressEl.appendChild(d);
+    });
+  }
+
+  function markUnsaved(){
+    statusEl.className = "status";
+    statusEl.textContent = "Unsaved — drag, then Save & next.";
+  }
+
+  function updateStatus(){
+    var f = FORMATIONS[current];
+    if(isSaved(f)){
+      statusEl.className = "status saved";
+      statusEl.textContent = "Saved for this formation.";
+    } else {
+      statusEl.className = "status";
+      statusEl.textContent = "Not saved yet — arrange the players, then Save & next.";
+    }
+  }
+
+  function saveCurrentFormation(){
+    var f = FORMATIONS[current];
+    var snap = {};
+    ROLES.forEach(function(role){ snap[role.id] = { x: fmtNum(positions[role.id].x), y: fmtNum(positions[role.id].y) }; });
+    SAVED[f.mode][f.rotation] = snap;
+    persistSaved();
+    renderProgress();
+    updateStatus();
+  }
+
+  btnPrev.addEventListener("click", function(){
+    loadFormation((current - 1 + FORMATIONS.length) % FORMATIONS.length);
+  });
+  btnSaveNext.addEventListener("click", function(){
+    saveCurrentFormation();
+    loadFormation((current + 1) % FORMATIONS.length);
+  });
+  btnResetFormation.addEventListener("click", function(){
+    var f = FORMATIONS[current];
+    if(SAVED[f.mode][f.rotation]){
+      delete SAVED[f.mode][f.rotation];
+      persistSaved();
+    }
+    loadFormation(current);
+  });
+
+  function roleEntryCode(roleId, pos){
+    return roleId + ":{x:" + pos.x + ",y:" + pos.y + "}";
+  }
+  function rotationEntryCode(rotation, positions, todo){
+    return "      " + rotation + ": { " + ROLES.map(function(r){ return roleEntryCode(r.id, positions[r.id]); }).join(", ") + " }," +
+      (todo ? "  // TODO: not saved yet, placeholder grid" : "");
+  }
+
+  btnGenerate.addEventListener("click", function(){
+    var doneCount = FORMATIONS.filter(isSaved).length;
+    var lines = ["  var MANUAL_POSITIONS = {"];
+    ["serve","receive"].forEach(function(mode, mi){
+      lines.push("    " + mode + ": {");
+      for(var r=1;r<=6;r++){
+        var saved = SAVED[mode][r];
+        var pos = {};
+        ROLES.forEach(function(role, i){
+          pos[role.id] = saved && saved[role.id] ? saved[role.id] : NEUTRAL_GRID[i];
+        });
+        lines.push(rotationEntryCode(r, pos, !saved));
+      }
+      lines.push(mi === 0 ? "    }," : "    }");
+    });
+    lines.push("  };");
+    codeOut.hidden = false;
+    codeOut.rows = 16;
+    codeOut.value = lines.join("\n");
+    btnCopy.hidden = false;
+    generateStatus.textContent = doneCount + " of 12 formations saved" +
+      (doneCount < 12 ? " — the rest are placeholder grids marked // TODO below." : " — all done!");
+  });
+
+  btnCopy.addEventListener("click", function(){
+    codeOut.focus();
+    codeOut.select();
+    try{
+      navigator.clipboard.writeText(codeOut.value).then(function(){
+        generateStatus.textContent = "Copied to clipboard.";
+      }, function(){
+        generateStatus.textContent = "Couldn't auto-copy — text is selected, press Ctrl/Cmd+C.";
+      });
+    }catch(e){
+      generateStatus.textContent = "Couldn't auto-copy — text is selected, press Ctrl/Cmd+C.";
+    }
+  });
+
+  loadSaved();
+  loadFormation(current);
+})();
+</script>
+</body>
+</html>

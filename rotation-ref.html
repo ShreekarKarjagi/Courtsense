@@ -1,0 +1,1167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Court Sense – Learn Volleyball Rotations &amp; Serve Receive</title>
+<meta name="description" content="Court Sense teaches volleyball's 6 rotations and overlap rules for a 5-1 offense. See the correct formation for Serving and Serve Receive, then test yourself by dragging players into a legal lineup.">
+<meta name="keywords" content="volleyball rotations, serve receive, 5-1 offense, overlap rules, volleyball positions, volleyball training">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Court Sense – Learn Volleyball Rotations & Serve Receive">
+<meta property="og:description" content="See the correct volleyball formation for every rotation, then test yourself against the overlap rules.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#f2ecdd;
+    --surface:#fffdf7;
+    --surface-2:#ebe3cf;
+    --ink:#1c2723;
+    --muted:#5d6b62;
+    --line:#d8cdb0;
+    --court:#0f6b63;
+    --court-dark:#0b544e;
+    --court-line:#f3c959;
+    --accent:#df5a34;
+    --accent-ink:#fff8ef;
+    --good:#2f8f57;
+    --bad:#c2432a;
+    --chip-s:#f3c959;
+    --chip-opp:#df5a34;
+    --chip-oh:#2f6fa3;
+    --chip-mb:#3c7a58;
+    --focus:#0f6b63;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#111815;
+      --surface:#1a2420;
+      --surface-2:#20302a;
+      --ink:#eee8d9;
+      --muted:#a3b3a9;
+      --line:#2c3b34;
+      --court:#0d5951;
+      --court-dark:#093f3a;
+      --court-line:#f3c959;
+      --accent:#ed7350;
+      --accent-ink:#1b120c;
+      --good:#4bb579;
+      --bad:#e4715a;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#111815;
+    --surface:#1a2420;
+    --surface-2:#20302a;
+    --ink:#eee8d9;
+    --muted:#a3b3a9;
+    --line:#2c3b34;
+    --court:#0d5951;
+    --court-dark:#093f3a;
+    --court-line:#f3c959;
+    --accent:#ed7350;
+    --accent-ink:#1b120c;
+    --good:#4bb579;
+    --bad:#e4715a;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', system-ui, sans-serif;
+    padding-inline:16px;
+    padding-block:28px;
+    min-height:100%;
+  }
+  h1,h2,h3,.display{
+    font-family:'Oswald', 'Inter', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+  }
+  .wrap{
+    /* Sized for today's single-column layout (court above, controls below).
+       Keep this narrow-ish: a wider cap here just inflates the court and
+       icons (court-frame is width:100% of this) with no benefit. */
+    max-width:640px;
+    margin:0 auto;
+  }
+  header.top{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:8px 20px;
+    margin-bottom:22px;
+  }
+  header.top h1{
+    font-size:clamp(28px,4.5vw,40px);
+    font-weight:700;
+    margin:0;
+    color:var(--ink);
+    text-wrap:balance;
+  }
+  header.top h1 span{ color:var(--accent); }
+  header.top p{
+    margin:2px 0 0;
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.55;
+  }
+
+  .app-tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:8px;
+    max-width:360px;
+  }
+  .app-tab{
+    flex:1;
+    text-align:center;
+    padding:11px 14px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--ink);
+    font-family:'Oswald',sans-serif;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+  .app-tab.active{
+    background:var(--accent);
+    border-color:transparent;
+    color:var(--accent-ink);
+  }
+  .app-tab-note{
+    font-size:13px;
+    color:var(--muted);
+    margin:0 0 20px;
+    max-width:60ch;
+  }
+
+  .layout{
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+  }
+
+  .panel{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px;
+  }
+
+  /* ---- Court ---- */
+  .top-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:12px;
+  }
+  .top-row.locked{
+    pointer-events:none;
+    opacity:0.55;
+  }
+  .mode-tabs{
+    display:flex;
+    gap:8px;
+    flex:0 1 auto;
+    min-width:0;
+  }
+  .mode-tab{
+    flex:1;
+    text-align:center;
+    padding:10px 10px;
+    border-radius:9px;
+    border:1px solid var(--line);
+    background:var(--surface-2);
+    color:var(--muted);
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+  .mode-tab.active{
+    background:var(--court);
+    border-color:var(--court);
+    color:#fff;
+  }
+  .rotation-stepper{
+    display:flex;
+    align-items:center;
+    gap:2px;
+    flex:0 0 auto;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:9px;
+    padding:4px;
+  }
+  .stepper-btn{
+    width:30px;
+    height:30px;
+    border-radius:6px;
+    border:none;
+    background:transparent;
+    color:var(--ink);
+    font-family:'Oswald',sans-serif;
+    font-size:18px;
+    line-height:1;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .stepper-btn:hover{ background:var(--surface); }
+  .rotation-label{
+    font-family:'Oswald',sans-serif;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding:0 8px;
+    white-space:nowrap;
+  }
+  .rotation-label b{ color:var(--accent); font-size:15px; }
+  .mode-note{
+    font-size:12.5px;
+    color:var(--muted);
+    margin-bottom:14px;
+    line-height:1.4;
+  }
+
+  .court-head{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    margin-bottom:12px;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .court-head .toggle-label{
+    display:flex; align-items:center; gap:6px; font-size:11px;
+  }
+  .court-head .toggle-label input{ width:14px; height:14px; }
+
+  .net-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:6px;
+  }
+  .net-row .net-label{
+    font-family:'Oswald',sans-serif;
+    font-size:11px;
+    letter-spacing:0.12em;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .net-bar{
+    flex:1;
+    height:10px;
+    border-radius:3px;
+    background:
+      repeating-linear-gradient(135deg, rgba(0,0,0,0.18) 0 2px, transparent 2px 8px),
+      var(--court-line);
+  }
+
+  .court-frame{
+    position:relative;
+    width:100%;
+    aspect-ratio:1/1;
+    background:var(--court);
+    border:3px solid var(--court-line);
+    border-radius:4px;
+    overflow:hidden;
+    touch-action:none;
+    box-shadow:inset 0 0 0 1px var(--court-dark);
+  }
+  .court-frame::after{ /* subtle floor texture */
+    content:"";
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(180deg, rgba(255,255,255,0.035) 0 2px, transparent 2px 22px);
+    pointer-events:none;
+  }
+  .attack-line{
+    position:absolute;
+    left:0; right:0;
+    top:33.333%;
+    border-top:2px dashed rgba(255,255,255,0.55);
+  }
+  .attack-line span{
+    position:absolute; right:4px; top:-16px;
+    font-size:9px; letter-spacing:0.08em; text-transform:uppercase;
+    color:rgba(255,255,255,0.6);
+    font-family:'Oswald',sans-serif;
+  }
+  .zone-grid{ position:absolute; inset:0; pointer-events:none; }
+  .zone-grid .vline{
+    position:absolute; top:0; bottom:0; width:0;
+    border-left:1.5px dashed rgba(255,255,255,0.28);
+  }
+  .zone-grid .label{
+    position:absolute;
+    font-family:'Oswald',sans-serif;
+    font-size:13px;
+    color:rgba(255,255,255,0.32);
+    font-weight:600;
+    text-align:center;
+    line-height:1.2;
+  }
+  .zone-grid .label .zone-abbr{
+    display:block;
+    font-size:9px;
+    letter-spacing:0.06em;
+    color:rgba(255,255,255,0.24);
+  }
+  .zone-grid.hidden{ display:none; }
+
+  svg.overlay{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    pointer-events:none;
+  }
+
+  .service-strip{
+    position:relative;
+    margin-top:10px;
+    min-height:92px;
+    border:2px dashed var(--court-line);
+    border-radius:8px;
+    background:var(--surface-2);
+  }
+  .service-strip[hidden]{ display:none; }
+  .service-strip .hint{
+    position:absolute;
+    left:10px; right:10px; bottom:6px;
+    font-family:'Oswald',sans-serif;
+    font-size:10px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--muted);
+    text-align:center;
+  }
+
+  .icon{
+    position:absolute;
+    width:17%;
+    aspect-ratio:1/1;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:var(--surface);
+    border:3px solid var(--ink);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    cursor:grab;
+    user-select:none;
+    -webkit-user-select:none;
+    box-shadow:0 3px 8px rgba(0,0,0,0.28);
+    transition:border-color 120ms ease, box-shadow 120ms ease;
+    touch-action:none;
+    z-index:2;
+  }
+  .icon:active{ cursor:grabbing; }
+  .icon.locked{ cursor:default; }
+  /* Smooth glide when a rotation/mode change moves an icon programmatically;
+     removed during an active drag (see makeDraggable) so dragging stays 1:1. */
+  .icon.animate{ transition:border-color 120ms ease, box-shadow 120ms ease, left 200ms ease, top 200ms ease; }
+  .icon .role{
+    font-family:'Oswald',sans-serif;
+    font-weight:700;
+    font-size:clamp(10px,2.6vw,15px);
+    line-height:1;
+    color:var(--ink);
+  }
+  .icon .stripe{
+    position:absolute;
+    top:-3px; left:-3px; right:-3px;
+    height:34%;
+    border-radius:50% 50% 0 0 / 100% 100% 0 0;
+    opacity:0.9;
+    z-index:-1;
+  }
+  .icon .slot-badge{
+    position:absolute;
+    top:-6px; right:-6px;
+    width:20px; height:20px;
+    border-radius:50%;
+    background:var(--ink);
+    color:var(--surface);
+    font-family:'Oswald',sans-serif;
+    font-size:11px;
+    font-weight:600;
+    display:flex; align-items:center; justify-content:center;
+    border:2px solid var(--surface);
+  }
+  .icon[data-group="S"]   .stripe{ background:var(--chip-s); }
+  .icon[data-group="OPP"] .stripe{ background:var(--chip-opp); }
+  .icon[data-group="OH"]  .stripe{ background:var(--chip-oh); }
+  .icon[data-group="MB"]  .stripe{ background:var(--chip-mb); }
+  .icon.violating{ border-color:var(--bad); box-shadow:0 0 0 4px rgba(194,67,42,0.22), 0 3px 8px rgba(0,0,0,0.28); }
+  .icon.legal-flash{ border-color:var(--good); }
+  .icon.is-server{
+    cursor:default;
+    border-style:dashed;
+    opacity:0.92;
+    box-shadow:none;
+  }
+
+  /* ---- Controls ---- */
+  .controls h2{ font-size:16px; margin:0 0 12px; }
+  label{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--muted);
+    font-family:'Oswald',sans-serif;
+  }
+  .btn{
+    font-family:'Oswald',sans-serif;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    border-radius:9px;
+    border:1px solid var(--line);
+    background:var(--surface-2);
+    color:var(--ink);
+    padding:10px 16px;
+    cursor:pointer;
+  }
+  .btn:hover{ filter:brightness(0.97); }
+  .btn:focus-visible, select:focus-visible, summary:focus-visible, input:focus-visible{
+    outline:2px solid var(--focus); outline-offset:2px;
+  }
+  .btn.primary{
+    background:var(--accent);
+    color:var(--accent-ink);
+    border-color:transparent;
+  }
+  .btn-row{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:16px; }
+
+  .verdict{
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:14px;
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    font-size:15px;
+    letter-spacing:0.01em;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--surface-2);
+    color:var(--muted);
+  }
+  .verdict .mark{
+    width:22px;height:22px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px; flex-shrink:0;
+    background:var(--line); color:var(--surface);
+  }
+  .verdict.good{ background:color-mix(in srgb, var(--good) 16%, var(--surface)); color:var(--good); }
+  .verdict.good .mark{ background:var(--good); color:var(--accent-ink); }
+  .verdict.bad{ background:color-mix(in srgb, var(--bad) 14%, var(--surface)); color:var(--bad); }
+  .verdict.bad .mark{ background:var(--bad); color:var(--accent-ink); }
+
+  .violations{ list-style:none; margin:0 0 16px; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .violations li{
+    font-size:13.5px;
+    line-height:1.4;
+    background:var(--surface-2);
+    border-left:3px solid var(--bad);
+    border-radius:6px;
+    padding:8px 10px;
+  }
+  .violations li b{ color:var(--ink); }
+
+  .stats{
+    display:flex;
+    gap:18px;
+    font-family:'Oswald',sans-serif;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+  }
+  .stats .stat{ display:flex; flex-direction:column; }
+  .stats .stat .num{ font-size:24px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .stats .stat .lbl{ font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); }
+
+  .quiz-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    font-family:'Oswald',sans-serif;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:10px;
+  }
+  .quiz-head #quizScore{ color:var(--accent); font-size:14px; }
+  .test-intro-copy{
+    font-size:13.5px;
+    line-height:1.55;
+    color:var(--muted);
+    margin:0 0 16px;
+  }
+  .learn-copy{
+    font-size:13.5px;
+    line-height:1.55;
+    color:var(--muted);
+    margin:0 0 18px;
+  }
+
+  .legend{
+    display:flex; flex-wrap:wrap; gap:10px 16px; margin-top:4px;
+  }
+  .legend .item{ display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink); }
+  .legend .dot{ width:11px; height:11px; border-radius:50%; }
+  .legend .dot.s{ background:var(--chip-s); }
+  .legend .dot.opp{ background:var(--chip-opp); }
+  .legend .dot.oh{ background:var(--chip-oh); }
+  .legend .dot.mb{ background:var(--chip-mb); }
+
+  footer.note{
+    margin-top:22px;
+    font-size:12px;
+    color:var(--muted);
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <h1>Court <span>Sense</span></h1>
+      <p>New to volleyball rotations? Start in <b>Learn</b> mode: pick Serving or Serve Receive, step through Rotations 1–6, and watch all six players snap into their correct spot — no arranging needed, just study the shape. Once it clicks, switch to <b>Test</b> mode, where the court is scrambled and you drag each player into a legal formation yourself. Behind the scenes, every formation follows volleyball's overlap rule: at the instant of serve, teammates must hold a fixed left-to-right and front-to-back order — Court Sense shows you exactly what that looks like, rotation by rotation.</p>
+    </div>
+  </header>
+
+  <div class="app-tabs">
+    <button type="button" class="app-tab active" id="appTabLearn" data-app="learn">Learn</button>
+    <button type="button" class="app-tab" id="appTabTest" data-app="test">Test</button>
+  </div>
+  <p class="app-tab-note" id="appTabNote">Learn mode places every player in a typical legal position — nothing to arrange, just study the shape.</p>
+
+  <div class="layout">
+
+    <section class="panel court-panel">
+      <div class="top-row" id="topRow">
+        <div class="mode-tabs">
+          <button type="button" class="mode-tab active" id="tabServe" data-mode="serve">Serving</button>
+          <button type="button" class="mode-tab" id="tabReceive" data-mode="receive">Serve receive</button>
+        </div>
+        <div class="rotation-stepper">
+          <button type="button" class="stepper-btn" id="rotPrev" aria-label="Previous rotation">‹</button>
+          <span class="rotation-label">Rotation <b id="rotBadgeNum">1</b></span>
+          <button type="button" class="stepper-btn" id="rotNext" aria-label="Next rotation">›</button>
+        </div>
+      </div>
+      <p class="mode-note" id="modeNote"></p>
+
+      <div class="court-head">
+        <div id="hintTogglesRow">
+          <label class="toggle-label">
+            <input type="checkbox" id="toggleZones" checked>
+            Zone guide
+          </label>
+        </div>
+      </div>
+
+      <div class="net-row">
+        <span class="net-label">NET</span>
+        <div class="net-bar"></div>
+      </div>
+
+      <div class="court-frame" id="court">
+        <div class="zone-grid" id="zoneGrid">
+          <div class="vline" style="left:33.333%"></div>
+          <div class="vline" style="left:66.666%"></div>
+          <div class="label" style="left:12%; top:6%;">4 <span class="zone-abbr">LF</span></div>
+          <div class="label" style="left:47%; top:6%;">3 <span class="zone-abbr">MF</span></div>
+          <div class="label" style="left:82%; top:6%;">2 <span class="zone-abbr">RF</span></div>
+          <div class="label" style="left:12%; top:70%;">5 <span class="zone-abbr">LB</span></div>
+          <div class="label" style="left:47%; top:70%;">6 <span class="zone-abbr">MB</span></div>
+          <div class="label" style="left:82%; top:70%;">1 <span class="zone-abbr">RB</span></div>
+        </div>
+        <div class="attack-line"><span>Attack line</span></div>
+        <svg class="overlay" id="overlay" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+        <!-- icons injected by JS -->
+      </div>
+
+      <div class="service-strip" id="serviceStrip">
+        <span class="hint">End line — the server may stand anywhere along it</span>
+        <!-- server icon moved in here by JS while Serving mode is active -->
+      </div>
+
+      <div class="legend" style="margin-top:12px;">
+        <span class="item"><span class="dot s"></span>Setter</span>
+        <span class="item"><span class="dot opp"></span>Opposite</span>
+        <span class="item"><span class="dot oh"></span>Outside</span>
+        <span class="item"><span class="dot mb"></span>Middle</span>
+      </div>
+    </section>
+
+    <section class="panel controls">
+      <h2>Controls</h2>
+
+      <div id="learnControls">
+        <p class="learn-copy">Every player is locked into a typical 5-1 position for the rotation and mode you pick. Step through the rotations above to see the whole cycle, then switch to Test to try building it yourself.</p>
+      </div>
+
+      <div id="testControls" hidden>
+        <div id="testIntro">
+          <p class="test-intro-copy">8 questions, no hints. Each one hands you a random rotation in either Serving or Serve Receive mode with the formation already scrambled — arrange it legally and submit.</p>
+          <div class="stats">
+            <div class="stat"><span class="num" id="statTestBest">–</span><span class="lbl">Best score</span></div>
+          </div>
+          <button class="btn primary" id="btnStartTest">Start test</button>
+        </div>
+
+        <div id="testActive" hidden>
+          <div class="quiz-head">
+            <span id="quizProgress">Question 1 of 8</span>
+            <span id="quizScore">Score 0</span>
+          </div>
+          <div class="verdict" id="testVerdict">
+            <span class="mark">–</span>
+            <span id="testVerdictText">Arrange the formation, then submit.</span>
+          </div>
+          <ul class="violations" id="testViolationList" hidden></ul>
+          <div class="btn-row">
+            <button class="btn primary" id="btnSubmitAnswer">Submit answer</button>
+            <button class="btn" id="btnNextQuestion" hidden>Next question</button>
+          </div>
+        </div>
+
+        <div id="testDone" hidden>
+          <div class="verdict good" id="testSummary">
+            <span class="mark">✓</span>
+            <span id="testSummaryText">Score: 0/8</span>
+          </div>
+          <button class="btn primary" id="btnRetryTest">Retry test</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="note">Best test score is saved in this browser only.</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var ROLES = [
+    {id:"S",   name:"Setter",    group:"S"},
+    {id:"OPP", name:"Opposite",  group:"OPP"},
+    {id:"OH1", name:"Outside 1", group:"OH"},
+    {id:"OH2", name:"Outside 2", group:"OH"},
+    {id:"M1",  name:"Middle 1",  group:"MB"},
+    {id:"M2",  name:"Middle 2",  group:"MB"}
+  ];
+  // Base rotational slot (Rotation 1) for each role — used only for the Test
+  // mode legality check and the small slot-number badge, not for where an
+  // icon is drawn in Learn mode (see MANUAL_POSITIONS below for that).
+  // Corrected from the Rotation 1 / Serve Receive coordinates: OH1/M2 are
+  // front row with OPP, and OH2/M1 are back row with S.
+  var BASE_SLOT = { S:1, OH1:2, M2:3, OPP:4, OH2:5, M1:6 };
+
+  var PAD = 0.09; // keep icon centers inset from the edges
+
+  // =========================================================================
+  // MANUAL COURT POSITIONS — hand-editable defaults for every icon in Learn
+  // mode. This is the ONLY place default (x,y) coordinates come from; edit
+  // any number below to move that role for that rotation + mode, no formula
+  // in between.
+  //
+  //   MANUAL_POSITIONS[mode][rotation][roleId] = {x, y}
+  //     mode:     "serve" or "receive"
+  //     rotation: 1-6
+  //     roleId:   "S", "OPP", "OH1", "OH2", "M1", "M2"
+  //
+  // x/y are fractions of the court: x 0 = left sideline, 1 = right sideline;
+  // y 0 = net, 1 = baseline. Keep values roughly within 0.08-0.92 so the icon
+  // stays fully on the court.
+  //
+  // In Serving mode, whichever role currently sits in Zone 1 is drawn behind
+  // the end line instead of on the court (see renderPositions' isServer
+  // check) — that role's entry in the "serve" table below is simply unused,
+  // so its number doesn't matter.
+  // =========================================================================
+  // Hand-dragged in position-picker.html against the user's own reference,
+  // then verified programmatically to satisfy every overlap rule below.
+  var MANUAL_POSITIONS = {
+    serve: {
+      1: { S:{x:0.2,  y:0.25 }, OPP:{x:0.384,y:0.247}, OH1:{x:0.572,y:0.375}, OH2:{x:0.146,y:0.471}, M1:{x:0.5,  y:0.75 }, M2:{x:0.495,y:0.113} },
+      2: { S:{x:0.85, y:0.46 }, OPP:{x:0.367,y:0.3  }, OH1:{x:0.8,  y:0.25 }, OH2:{x:0.144,y:0.219}, M1:{x:0.506,y:0.805}, M2:{x:0.49, y:0.109} },
+      3: { S:{x:0.243,y:0.417}, OPP:{x:0.896,y:0.105}, OH1:{x:0.352,y:0.611}, OH2:{x:0.553,y:0.288}, M1:{x:0.471,y:0.107}, M2:{x:0.8,  y:0.75 } },
+      4: { S:{x:0.426,y:0.174}, OPP:{x:0.5,  y:0.25 }, OH1:{x:0.119,y:0.479}, OH2:{x:0.575,y:0.312}, M1:{x:0.568,y:0.06 }, M2:{x:0.533,y:0.726} },
+      5: { S:{x:0.318,y:0.31 }, OPP:{x:0.827,y:0.488}, OH1:{x:0.161,y:0.135}, OH2:{x:0.2,  y:0.75 }, M1:{x:0.5,  y:0.116}, M2:{x:0.526,y:0.794} },
+      6: { S:{x:0.791,y:0.083}, OPP:{x:0.243,y:0.504}, OH1:{x:0.618,y:0.313}, OH2:{x:0.484,y:0.72 }, M1:{x:0.5,  y:0.75 }, M2:{x:0.451,y:0.082} }
+    },
+    receive: {
+      1: { S:{x:0.911,y:0.754}, OPP:{x:0.143,y:0.263}, OH1:{x:0.792,y:0.583}, OH2:{x:0.175,y:0.631}, M1:{x:0.511,y:0.752}, M2:{x:0.498,y:0.283} },
+      2: { S:{x:0.527,y:0.187}, OPP:{x:0.68, y:0.069}, OH1:{x:0.859,y:0.715}, OH2:{x:0.185,y:0.637}, M1:{x:0.504,y:0.728}, M2:{x:0.889,y:0.297} },
+      3: { S:{x:0.253,y:0.283}, OPP:{x:0.864,y:0.096}, OH1:{x:0.486,y:0.781}, OH2:{x:0.191,y:0.685}, M1:{x:0.067,y:0.184}, M2:{x:0.822,y:0.686} },
+      4: { S:{x:0.101,y:0.068}, OPP:{x:0.874,y:0.807}, OH1:{x:0.534,y:0.75 }, OH2:{x:0.219,y:0.604}, M1:{x:0.195,y:0.256}, M2:{x:0.801,y:0.588} },
+      5: { S:{x:0.621,y:0.065}, OPP:{x:0.638,y:0.873}, OH1:{x:0.15, y:0.489}, OH2:{x:0.862,y:0.448}, M1:{x:0.718,y:0.234}, M2:{x:0.485,y:0.729} },
+      6: { S:{x:0.723,y:0.1  }, OPP:{x:0.278,y:0.807}, OH1:{x:0.121,y:0.481}, OH2:{x:0.555,y:0.659}, M1:{x:0.911,y:0.513}, M2:{x:0.098,y:0.14 } }
+    }
+  };
+
+  // Looks up one role's default (x,y) straight from MANUAL_POSITIONS above.
+  function learnTarget(roleId, rotation, mode){
+    var table = mode === "receive" ? MANUAL_POSITIONS.receive : MANUAL_POSITIONS.serve;
+    var entry = table[rotation][roleId];
+    return { x: entry.x, y: entry.y };
+  }
+
+  var state = {
+    rotation: 1,
+    mode: "serve", // "serve" | "receive"
+    positions: {} // roleId -> {x,y} fraction 0..1
+  };
+
+  var court = document.getElementById("court");
+  var overlay = document.getElementById("overlay");
+  var zoneGrid = document.getElementById("zoneGrid");
+  var rotBadgeNum = document.getElementById("rotBadgeNum");
+  var rotPrev = document.getElementById("rotPrev");
+  var rotNext = document.getElementById("rotNext");
+  var toggleZones = document.getElementById("toggleZones");
+  var serviceStrip = document.getElementById("serviceStrip");
+  var modeNote = document.getElementById("modeNote");
+  var tabServe = document.getElementById("tabServe");
+  var tabReceive = document.getElementById("tabReceive");
+  var topRowEl = document.getElementById("topRow");
+  var hintTogglesRow = document.getElementById("hintTogglesRow");
+
+  var appTabLearn = document.getElementById("appTabLearn");
+  var appTabTest = document.getElementById("appTabTest");
+  var appTabNote = document.getElementById("appTabNote");
+  var learnControls = document.getElementById("learnControls");
+  var testControls = document.getElementById("testControls");
+  var testIntro = document.getElementById("testIntro");
+  var testActiveEl = document.getElementById("testActive");
+  var testDoneEl = document.getElementById("testDone");
+  var quizProgress = document.getElementById("quizProgress");
+  var quizScore = document.getElementById("quizScore");
+  var testVerdict = document.getElementById("testVerdict");
+  var testVerdictText = document.getElementById("testVerdictText");
+  var testViolationList = document.getElementById("testViolationList");
+  var btnSubmitAnswer = document.getElementById("btnSubmitAnswer");
+  var btnNextQuestion = document.getElementById("btnNextQuestion");
+  var btnStartTest = document.getElementById("btnStartTest");
+  var btnRetryTest = document.getElementById("btnRetryTest");
+  var statTestBest = document.getElementById("statTestBest");
+  var testSummaryText = document.getElementById("testSummaryText");
+
+  var APP_TAB_NOTE = {
+    learn: "Learn mode places every player in a typical legal position — nothing to arrange, just study the shape.",
+    test: "Test mode hides every hint. Each question scrambles a random rotation and mode — arrange it legally and submit."
+  };
+
+  var MODE_COPY = {
+    serve: "Your team is serving. The server (Zone 1) may stand anywhere behind the end line — only the other five must hold their overlap order.",
+    receive: "The opponent is serving. Your whole team is on court, so all six players must hold overlap order relative to each other."
+  };
+  function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+  function currentSlot(roleId, rotation){
+    var base = BASE_SLOT[roleId]; // 1..6
+    var i = base - 1;
+    return ((i - (rotation - 1) + 6) % 6) + 1;
+  }
+
+  // NOT a default position — this is Test mode's scramble. It ignores
+  // learnTarget entirely and just throws each icon at a random (x,y).
+  function randomScatterPositions(){
+    var pos = {};
+    ROLES.forEach(function(r){
+      pos[r.id] = {
+        x: PAD + Math.random() * (1 - 2*PAD),
+        y: PAD + Math.random() * (1 - 2*PAD)
+      };
+    });
+    return pos;
+  }
+
+  // ---- build icon DOM ----
+  var iconEls = {};
+  ROLES.forEach(function(role){
+    var el = document.createElement("div");
+    el.className = "icon animate";
+    el.dataset.role = role.id;
+    el.dataset.group = role.group;
+    el.innerHTML =
+      '<div class="stripe"></div>' +
+      '<div class="role">' + role.id + '</div>' +
+      '<div class="slot-badge" data-badge></div>';
+    court.appendChild(el);
+    iconEls[role.id] = el;
+    makeDraggable(el, role.id);
+  });
+
+  function makeDraggable(el, roleId){
+    var dragging = false;
+
+    el.addEventListener("pointerdown", function(e){
+      if(appMode === "learn" || el.dataset.locked === "true") return;
+      dragging = true;
+      el.classList.remove("animate"); // instant 1:1 tracking while dragging
+      el.setPointerCapture(e.pointerId);
+      el.style.zIndex = 5;
+    });
+    el.addEventListener("pointermove", function(e){
+      if(!dragging) return;
+      var rect = court.getBoundingClientRect();
+      var x = clamp((e.clientX - rect.left) / rect.width, PAD*0.4, 1 - PAD*0.4);
+      var y = clamp((e.clientY - rect.top) / rect.height, PAD*0.4, 1 - PAD*0.4);
+      state.positions[roleId] = {x:x, y:y};
+      renderPositions();
+    });
+    function end(e){
+      if(!dragging) return;
+      dragging = false;
+      el.classList.add("animate");
+      el.style.zIndex = "";
+      try{ el.releasePointerCapture(e.pointerId); }catch(err){}
+    }
+    el.addEventListener("pointerup", end);
+    el.addEventListener("pointercancel", end);
+  }
+
+  function renderPositions(){
+    var serverRole = roleAtSlot(1);
+    ROLES.forEach(function(role){
+      var el = iconEls[role.id];
+      var isServer = state.mode === "serve" && serverRole && role.id === serverRole.id;
+      var badge = el.querySelector("[data-badge]");
+      badge.textContent = currentSlot(role.id, state.rotation);
+      el.classList.remove("violating","legal-flash");
+      el.classList.toggle("locked", appMode === "learn");
+
+      if(isServer){
+        if(el.parentNode !== serviceStrip) serviceStrip.appendChild(el);
+        el.style.left = "50%";
+        el.style.top = "38%";
+        el.classList.add("is-server");
+        el.dataset.locked = "true";
+      } else {
+        if(el.parentNode !== court) court.appendChild(el);
+        el.classList.remove("is-server");
+        el.dataset.locked = "false";
+        var p = state.positions[role.id];
+        el.style.left = (p.x*100) + "%";
+        el.style.top = (p.y*100) + "%";
+      }
+    });
+  }
+
+  // Sets every icon back to its default spot (learnTarget, above) for the
+  // current rotation + mode. Called on load, and whenever the rotation
+  // stepper, Serving/Serve Receive tabs, or Learn tab changes.
+  function applyLearnPositions(){
+    var pos = {};
+    ROLES.forEach(function(role){ pos[role.id] = learnTarget(role.id, state.rotation, state.mode); });
+    state.positions = pos;
+    renderPositions();
+  }
+
+  function setMode(mode){
+    state.mode = mode;
+    tabServe.classList.toggle("active", mode === "serve");
+    tabReceive.classList.toggle("active", mode === "receive");
+    modeNote.textContent = MODE_COPY[mode];
+    applyLearnPositions();
+  }
+
+  function setRotation(r){
+    state.rotation = r;
+    rotBadgeNum.textContent = r;
+    applyLearnPositions();
+  }
+
+  function stepRotation(delta){
+    setRotation(((state.rotation - 1 + delta + 6) % 6) + 1);
+  }
+
+  // ---- overlap check (used by Test mode) ----
+  var PAIR_RULES = [
+    {a:4,b:3, axis:"x", desc:"Zone 4 (front-left) must stay left of Zone 3 (front-middle)."},
+    {a:3,b:2, axis:"x", desc:"Zone 3 (front-middle) must stay left of Zone 2 (front-right)."},
+    {a:5,b:6, axis:"x", desc:"Zone 5 (back-left) must stay left of Zone 6 (back-middle)."},
+    {a:6,b:1, axis:"x", desc:"Zone 6 (back-middle) must stay left of Zone 1 (back-right)."},
+    {a:4,b:5, axis:"y", desc:"Zone 4 (front-left) must stay nearer the net than Zone 5 (back-left)."},
+    {a:3,b:6, axis:"y", desc:"Zone 3 (front-middle) must stay nearer the net than Zone 6 (back-middle)."},
+    {a:2,b:1, axis:"y", desc:"Zone 2 (front-right) must stay nearer the net than Zone 1 (back-right)."}
+  ];
+
+  function roleAtSlot(slot){
+    for(var i=0;i<ROLES.length;i++){
+      if(currentSlot(ROLES[i].id, state.rotation) === slot) return ROLES[i];
+    }
+    return null;
+  }
+
+  function checkFormation(){
+    var slotPos = {};
+    for(var s=1;s<=6;s++){
+      var role = roleAtSlot(s);
+      slotPos[s] = { role:role, pos: state.positions[role.id] };
+    }
+
+    var rules = state.mode === "serve"
+      ? PAIR_RULES.filter(function(r){ return r.a !== 1 && r.b !== 1; })
+      : PAIR_RULES;
+
+    var violations = [];
+    rules.forEach(function(rule){
+      var A = slotPos[rule.a], B = slotPos[rule.b];
+      var av = A.pos[rule.axis], bv = B.pos[rule.axis];
+      if(!(av < bv)){
+        violations.push({
+          roleA:A.role, roleB:B.role,
+          text: A.role.name + " (Zone " + rule.a + ") and " + B.role.name + " (Zone " + rule.b + ") are overlapping — " + rule.desc
+        });
+      }
+    });
+
+    return violations;
+  }
+
+  function drawViolationLines(violations){
+    overlay.innerHTML = "";
+    violations.forEach(function(v){
+      var pa = state.positions[v.roleA.id];
+      var pb = state.positions[v.roleB.id];
+      var line = document.createElementNS("http://www.w3.org/2000/svg","line");
+      line.setAttribute("x1", pa.x*100);
+      line.setAttribute("y1", pa.y*100);
+      line.setAttribute("x2", pb.x*100);
+      line.setAttribute("y2", pb.y*100);
+      line.setAttribute("stroke", "var(--bad)");
+      line.setAttribute("stroke-width", "1.2");
+      line.setAttribute("stroke-dasharray", "3,2.5");
+      overlay.appendChild(line);
+      iconEls[v.roleA.id].classList.add("violating");
+      iconEls[v.roleB.id].classList.add("violating");
+    });
+  }
+
+  // ---- app mode: Learn vs Test ----
+  var appMode = "learn";
+  var testState = "intro"; // "intro" | "active" | "done"
+  var test = { total:8, index:0, score:0, answered:false };
+  var testBest = null;
+
+  function setAppMode(mode){
+    appMode = mode;
+    appTabLearn.classList.toggle("active", mode === "learn");
+    appTabTest.classList.toggle("active", mode === "test");
+    appTabNote.textContent = APP_TAB_NOTE[mode];
+    learnControls.hidden = mode !== "learn";
+    testControls.hidden = mode !== "test";
+    topRowEl.classList.toggle("locked", mode === "test");
+    hintTogglesRow.hidden = mode === "test";
+
+    if(mode === "test"){
+      toggleZones.checked = false;
+      zoneGrid.classList.add("hidden");
+      overlay.innerHTML = "";
+      ROLES.forEach(function(r){ iconEls[r.id].classList.remove("violating","legal-flash"); });
+    } else {
+      toggleZones.checked = true;
+      zoneGrid.classList.remove("hidden");
+      applyLearnPositions();
+    }
+    syncTestPanels();
+  }
+
+  function syncTestPanels(){
+    testIntro.hidden = testState !== "intro";
+    testActiveEl.hidden = testState !== "active";
+    testDoneEl.hidden = testState !== "done";
+    loadTestBest();
+  }
+
+  function loadTestBest(){
+    try{
+      var raw = localStorage.getItem("rotationRef.testBest");
+      testBest = raw ? JSON.parse(raw) : null;
+    }catch(e){ testBest = null; }
+    statTestBest.textContent = testBest == null ? "–" : (testBest + "/" + test.total);
+  }
+
+  function saveTestBest(score){
+    try{
+      if(testBest == null || score > testBest){
+        testBest = score;
+        localStorage.setItem("rotationRef.testBest", JSON.stringify(testBest));
+      }
+    }catch(e){}
+  }
+
+  function startTest(){
+    testState = "active";
+    test.index = 0;
+    test.score = 0;
+    syncTestPanels();
+    nextTestQuestion();
+  }
+
+  function nextTestQuestion(){
+    test.answered = false;
+    var mode = Math.random() < 0.5 ? "serve" : "receive";
+    var rotation = 1 + Math.floor(Math.random()*6);
+
+    state.mode = mode;
+    state.rotation = rotation;
+    state.positions = randomScatterPositions();
+
+    tabServe.classList.toggle("active", mode === "serve");
+    tabReceive.classList.toggle("active", mode === "receive");
+    modeNote.textContent = MODE_COPY[mode];
+    rotBadgeNum.textContent = rotation;
+    renderPositions();
+
+    quizProgress.textContent = "Question " + (test.index+1) + " of " + test.total;
+    quizScore.textContent = "Score " + test.score;
+    testVerdict.className = "verdict";
+    testVerdict.querySelector(".mark").textContent = "–";
+    testVerdictText.textContent = "Arrange the formation, then submit.";
+    testViolationList.hidden = true;
+    testViolationList.innerHTML = "";
+    overlay.innerHTML = "";
+    ROLES.forEach(function(r){ iconEls[r.id].classList.remove("violating","legal-flash"); });
+    btnSubmitAnswer.hidden = false;
+    btnNextQuestion.hidden = true;
+  }
+
+  function submitTestAnswer(){
+    if(test.answered) return;
+    test.answered = true;
+
+    var violations = checkFormation();
+    var correct = violations.length === 0;
+    if(correct) test.score++;
+
+    testVerdict.className = "verdict " + (correct ? "good" : "bad");
+    testVerdict.querySelector(".mark").textContent = correct ? "✓" : "✕";
+    testVerdictText.textContent = correct
+      ? "Correct — legal formation."
+      : violations.length + " overlap violation" + (violations.length>1?"s":"") + ".";
+
+    if(correct){
+      testViolationList.hidden = true;
+      testViolationList.innerHTML = "";
+      ROLES.forEach(function(r){
+        if(!iconEls[r.id].classList.contains("is-server")) iconEls[r.id].classList.add("legal-flash");
+      });
+    } else {
+      testViolationList.hidden = false;
+      testViolationList.innerHTML = violations.map(function(v){ return "<li>" + v.text + "</li>"; }).join("");
+      drawViolationLines(violations);
+    }
+
+    quizScore.textContent = "Score " + test.score;
+    btnSubmitAnswer.hidden = true;
+    btnNextQuestion.hidden = false;
+    btnNextQuestion.textContent = (test.index+1 >= test.total) ? "See results" : "Next question";
+  }
+
+  function advanceTest(){
+    test.index++;
+    if(test.index >= test.total){
+      finishTest();
+    } else {
+      nextTestQuestion();
+    }
+  }
+
+  function finishTest(){
+    testState = "done";
+    saveTestBest(test.score);
+    testSummaryText.textContent = "Score: " + test.score + "/" + test.total +
+      (testBest != null ? " · Best " + testBest + "/" + test.total : "");
+    syncTestPanels();
+  }
+
+  // ---- wire controls ----
+  tabServe.addEventListener("click", function(){ setMode("serve"); });
+  tabReceive.addEventListener("click", function(){ setMode("receive"); });
+
+  rotPrev.addEventListener("click", function(){ stepRotation(-1); });
+  rotNext.addEventListener("click", function(){ stepRotation(1); });
+
+  toggleZones.addEventListener("change", function(){
+    zoneGrid.classList.toggle("hidden", !toggleZones.checked);
+  });
+
+  appTabLearn.addEventListener("click", function(){ setAppMode("learn"); });
+  appTabTest.addEventListener("click", function(){ setAppMode("test"); });
+  btnStartTest.addEventListener("click", startTest);
+  btnSubmitAnswer.addEventListener("click", submitTestAnswer);
+  btnNextQuestion.addEventListener("click", advanceTest);
+  btnRetryTest.addEventListener("click", startTest);
+
+  // ---- init ----
+  function start(data){
+    data = data || {};
+    state.rotation = data.rotation || 1;
+    state.mode = data.mode === "receive" ? "receive" : "serve";
+    appMode = data.appMode === "test" ? "test" : "learn";
+
+    rotBadgeNum.textContent = state.rotation;
+    tabServe.classList.toggle("active", state.mode === "serve");
+    tabReceive.classList.toggle("active", state.mode === "receive");
+    modeNote.textContent = MODE_COPY[state.mode];
+
+    appTabLearn.classList.toggle("active", appMode === "learn");
+    appTabTest.classList.toggle("active", appMode === "test");
+    appTabNote.textContent = APP_TAB_NOTE[appMode];
+    learnControls.hidden = appMode !== "learn";
+    testControls.hidden = appMode !== "test";
+    topRowEl.classList.toggle("locked", appMode === "test");
+    hintTogglesRow.hidden = appMode === "test";
+    if(appMode === "test"){ toggleZones.checked = false; zoneGrid.classList.add("hidden"); }
+
+    if(appMode === "learn"){
+      applyLearnPositions();
+    } else {
+      state.positions = randomScatterPositions();
+      renderPositions();
+    }
+    syncTestPanels();
+  }
+
+  function snapshot(){
+    return { rotation: state.rotation, mode: state.mode, appMode: appMode };
+  }
+  try{
+    if(window.claude && window.claude.hot){
+      window.claude.hot.snapshot(snapshot);
+      window.claude.hot.ready ? window.claude.hot.ready(start) : start(window.claude.hot.data || {});
+    } else {
+      start({});
+    }
+  }catch(e){ start({}); }
+
+})();
+</script>
+</body>
+</html>
